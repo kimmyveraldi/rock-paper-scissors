@@ -9,16 +9,17 @@
 </head>
 
 <body>
-<div id='container'>
-    <button>rock</button>
-    <button>paper</button>
-    <button>scissors</button>
-</div>
+    <div id='container'>
+        <button class="option">rock</button>
+        <button class="option">paper</button>
+        <button class="option">scissors</button>
+    </div>
     <script>
         const scoreDiv = document.createElement('div');
         const container = document.querySelector('#container');
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => { button.addEventListener('click', main)});
+        const resetButton = document.createElement('button');
+        const buttons = document.querySelectorAll('.option');
+        buttons.forEach(button => { button.addEventListener('click', main) });
         let computerCount = 0;
         let playerCount = 0;
 
@@ -31,44 +32,58 @@
 
         function playRound(playerChoice, computerChoice) {
             if (playerChoice == computerChoice) {
-                return("tie");
+                return ("tie");
             } else if (
                 (playerChoice == "rock" && computerChoice == "scissors") ||
                 (playerChoice == "paper" && computerChoice == "rock") ||
                 (playerChoice == "scissors" && computerChoice == "paper")
             ) {
                 ++playerCount;
-                return("player");
+                return ("player");
             } else {
                 ++computerCount;
-                return("computer");
+                return ("computer");
             }
         }
 
         function scoreKeeper(roundResult) {
-            switch(roundResult) {
-                case "tie": 
-                scoreDiv.textContent = 'Its a tie, score: ' + playerCount +'-'+computerCount;
-                container.appendChild(scoreDiv);
-                break;
-                case "player": 
-                scoreDiv.textContent = 'You won that round, score: ' + playerCount +'-'+computerCount;
-                container.appendChild(scoreDiv);
-                break;
-                case "computer": 
-                scoreDiv.textContent = 'You lost that round, score: '+ playerCount +'-'+computerCount;
-                container.appendChild(scoreDiv);
-                break;
+            container.appendChild(scoreDiv);
+            switch (roundResult) {
+                case "tie":
+                    scoreDiv.textContent = 'Its a tie, score: ' + playerCount + '-' + computerCount;
+                    break;
+                case "player":
+                    scoreDiv.textContent = 'You won that round, score: ' + playerCount + '-' + computerCount;
+                    break;
+                case "computer":
+                    scoreDiv.textContent = 'You lost that round, score: ' + playerCount + '-' + computerCount;
+                    break;
+
             }
         }
-        
+
+        function finalScore() {
+            scoreDiv.textContent = 'GAME OVER, score: ' + playerCount + '-' + computerCount;
+            buttons.forEach(button => { button.style.display = "none"; });
+            resetButton.textContent = "Play Again";
+            container.appendChild(resetButton);
+            resetButton.addEventListener('click', reset);
+        }
+
+        function reset() {
+            playerCount = 0;
+            computerCount = 0;
+            buttons.forEach(button => { button.style.display = "inline-block"; });
+            container.removeChild(scoreDiv);
+            container.removeChild(resetButton);
+        }
+
         function main(e) {
             playerChoice = (e.target.textContent);
-            roundResult = playRound(playerChoice, computerPlay());
-            console.log(roundResult);
+            let roundResult = playRound(playerChoice, computerPlay());
             scoreKeeper(roundResult);
             if (playerCount == 5 || computerCount == 5) {
-                scoreDiv.textContent = 'GAME OVER, score: ' + playerCount +'-'+computerCount;
+                finalScore()
             }
         }
 
