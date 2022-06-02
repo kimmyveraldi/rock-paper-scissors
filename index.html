@@ -9,12 +9,14 @@
 </head>
 
 <body>
-
+<div id='container'>
     <button>rock</button>
     <button>paper</button>
     <button>scissors</button>
-
+</div>
     <script>
+        const scoreDiv = document.createElement('div');
+        const container = document.querySelector('#container');
         const buttons = document.querySelectorAll('button');
         buttons.forEach(button => { button.addEventListener('click', main)});
         let computerCount = 0;
@@ -29,23 +31,45 @@
 
         function playRound(playerChoice, computerChoice) {
             if (playerChoice == computerChoice) {
-                console.log("It's a tie!");
+                return("tie");
             } else if (
                 (playerChoice == "rock" && computerChoice == "scissors") ||
                 (playerChoice == "paper" && computerChoice == "rock") ||
                 (playerChoice == "scissors" && computerChoice == "paper")
             ) {
                 ++playerCount;
-                console.log("You won! " + playerChoice + " beats " + computerChoice);
+                return("player");
             } else {
                 ++computerCount;
-                console.log("You lost! " + computerChoice + " beats " + playerChoice);
+                return("computer");
             }
         }
+
+        function scoreKeeper(roundResult) {
+            switch(roundResult) {
+                case "tie": 
+                scoreDiv.textContent = 'Its a tie, score: ' + playerCount +'-'+computerCount;
+                container.appendChild(scoreDiv);
+                break;
+                case "player": 
+                scoreDiv.textContent = 'You won that round, score: ' + playerCount +'-'+computerCount;
+                container.appendChild(scoreDiv);
+                break;
+                case "computer": 
+                scoreDiv.textContent = 'You lost that round, score: '+ playerCount +'-'+computerCount;
+                container.appendChild(scoreDiv);
+                break;
+            }
+        }
+        
         function main(e) {
             playerChoice = (e.target.textContent);
-            playRound(playerChoice, computerPlay());
-            console.log(playerCount,computerCount);  
+            roundResult = playRound(playerChoice, computerPlay());
+            console.log(roundResult);
+            scoreKeeper(roundResult);
+            if (playerCount == 5 || computerCount == 5) {
+                scoreDiv.textContent = 'GAME OVER, score: ' + playerCount +'-'+computerCount;
+            }
         }
 
     </script>
