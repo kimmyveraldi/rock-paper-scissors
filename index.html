@@ -10,45 +10,46 @@
 
 <body>
 
-    <script>
+    <button>rock</button>
+    <button>paper</button>
+    <button>scissors</button>
 
-        let computerCount = 0
+    <script>
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => { button.addEventListener('click', main)});
+        let computerCount = 0;
         let playerCount = 0;
 
         function computerPlay() {
             const optionsArray = ["rock", "paper", "scissors"];
             let randomNumber = (Math.floor(Math.random() * 3));
-            return (optionsArray[randomNumber]);
+            let computerChoice = (optionsArray[randomNumber])
+            return computerChoice;
         }
 
-        function playRound(playerSelection, computerSelection) {
-            if (playerSelection == computerSelection) {
-                return ("It's a tie!");
+        function playRound(playerChoice, computerChoice) {
+            if (playerChoice == computerChoice) {
+                console.log("It's a tie!");
             } else if (
-                (playerSelection == "rock" && computerSelection == "scissors") ||
-                (playerSelection == "paper" && computerSelection == "rock") ||
-                (playerSelection == "scissors" && computerSelection == "paper")
+                (playerChoice == "rock" && computerChoice == "scissors") ||
+                (playerChoice == "paper" && computerChoice == "rock") ||
+                (playerChoice == "scissors" && computerChoice == "paper")
             ) {
                 ++playerCount;
-                return ("You won! " + playerSelection + " beats " + computerSelection);
+                console.log("You won! " + playerChoice + " beats " + computerChoice);
             } else {
                 ++computerCount;
-                return ("You lost! " + computerSelection + " beats " + playerSelection);
+                console.log("You lost! " + computerChoice + " beats " + playerChoice);
             }
         }
-
-        function game() {
-            for (let i = 0; i < 5; i++) {
-                let computerSelection = computerPlay();
-                let playerSelection = prompt("Select rock, paper or scissors").toLowerCase();
-                console.log(playRound(playerSelection, computerSelection));
-            }
-            let winner = playerCount > computerCount ? console.log("After 5 rounds you are the winner") : console.log("After 5 rounds you are the loser");
+        function main(e) {
+            playerChoice = (e.target.textContent);
+            playRound(playerChoice, computerPlay());
+            console.log(playerCount,computerCount);  
         }
-
-        game();
 
     </script>
+
 
 </body>
 
